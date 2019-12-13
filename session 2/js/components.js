@@ -45,7 +45,7 @@ components.login = `
     <section class="login-container">
         <form id="form-login" class="form-login">
             <div class="form-header">
-                <h3>Mindx Chat</h3>
+                <h3>Messenger</h3>
             </div>
             <div class="form-content">
                 <div class="input-wrapper">
