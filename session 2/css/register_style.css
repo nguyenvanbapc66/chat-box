@@ -37,6 +37,10 @@ button:hover {
     cursor: pointer;
 }
 
+button:focus{
+    outline: none;
+}
+
 button:disabled {
     background: #f2f2f2;
 }

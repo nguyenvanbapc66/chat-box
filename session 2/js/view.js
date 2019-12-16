@@ -97,6 +97,7 @@ view.showComponents = function(name) {
             app.innerHTML = components.nav + components.chat;
 
             controller.loadConversations();
+            controller.setupDatabaseChange() // new message coming > update message to screen
 
             let btnSignOut = document.getElementById('sign-out-btn');
             btnSignOut.onclick = signOutClickHandler;
@@ -107,29 +108,36 @@ view.showComponents = function(name) {
             }
 
             view.setText('user-email', firebase.auth().currentUser.email);
-            // let displayEmail = document.getElementById('user-email');
-            // displayEmail.innerText = firebase.auth().currentUser.email;
+
+            let formAddMessage = document.getElementById('form-add-message')
+            formAddMessage.onsubmit = formAddMessageSubmitHandler
+
+            function formAddMessageSubmitHandler(event){
+                event.preventDefault()
+
+                let content = formAddMessage.message.value.trim();
+                if(!content){
+                    return
+                }
+
+                let message = {
+                    content: content,
+                    owner: firebase.auth().currentUser.email,
+                    createAt: new Date().toISOString()
+                }
+                
+                
+                controller.addMessage(message)
+            }
         }
     }
 }
-
-{/* <div class="message">
-                    <span>Hello</span>
-                </div>
-                <div class="message your">
-                    <span>How are you?</span>
-                </div>
-                <div class="message">
-                    <span>I'm fine</span>
-                </div> */}
 
 view.showCurrentConversation = function(){
     if(model.currentConversation){
         let messages = model.currentConversation.messages
         let listMessages = document.getElementById('list-messages')
-        // console.log(messages)
-        // console.log(listMessages)
-        // TODO
+        listMessages.innerHTML = ""
 
         for(let message of messages){
 
@@ -152,6 +160,8 @@ view.showCurrentConversation = function(){
             
             listMessages.innerHTML += html;
         }
+
+        listMessages.scrollTop = listMessages.scrollHeight
     }
 }
 

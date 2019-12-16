@@ -72,11 +72,11 @@ components.chat = `
         <div class="current-conversation">
             <div id="list-messages" class="list-messages">
             </div>
-            <form class="form-add-message">
+            <form id="form-add-message" class="form-add-message">
                 <div class="input-wrapper">
-                    <input type="text" name="message" placeholder="Enter your message here">
+                    <input id="message-input" type="text" name="message" placeholder="Enter your message here">
                 </div>
-                <button type="submit">Send</button>
+                <button id="add-message-btn" type="submit">Send</button>
             </form>
         </div>
         <!-- right -->

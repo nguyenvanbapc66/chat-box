@@ -68,7 +68,63 @@ controller.loadConversations = async function(){
     view.showCurrentConversation()
 
     // TODO: remove the line below
-    demoQueryDatabase()
+    // demoQueryDatabase()
+}
+
+controller.setupDatabaseChange = function(){
+    let currentEmail = firebase.auth().currentUser.email
+    let isFirstRun = true
+
+    firebase
+        .firestore()
+        .collection('conversations')
+        .where('user', 'array-contains', currentEmail)
+        .onSnapshot(function(snapshot){
+            if(isFirstRun){
+                isFirstRun = false
+                return
+            }
+            let docChanges = snapshot.docChanges()
+            for(let docChange of docChanges){
+                if(docChange.type == 'modified'){
+                    let doc = docChange.doc
+                    let conversation = tranformDoc(doc)
+
+                    if(model.currentConversation 
+                        && model.currentConversation.id == conversation.id){
+                        model.saveCurrentConversation(conversation)
+                        view.showCurrentConversation()
+                    }
+                }
+            }
+        })
+}
+
+controller.addMessage = async function(message){
+    if(model.currentConversation){
+        let currentId = model.currentConversation.id
+        view.disable('add-message-btn')
+
+        await firebase
+        .firestore()
+        .collection('conversations')
+        .doc(currentId)
+        .update({
+            messages: firebase.firestore.FieldValue.arrayUnion(message)
+        })
+
+        view.enable('add-message-btn')
+        document.getElementById('message-input').value = ''
+    }
+    
+    // await firebase
+    //     .firestore()
+    //     .collection('conversations')
+    //     .doc(id)
+    //     .onSnapshot(function(doc) {
+    //         var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+    //         console.log(source, " data: ", doc.data());
+    //     })
 }
 
 async function demoQueryDatabase(){
@@ -76,22 +132,22 @@ async function demoQueryDatabase(){
     // 1. read .get()
 
     // getMany
-    let result = await firebase
-        .firestore()
-        .collection('conversations')
-        // where('users')
-        .where('title', '==', "First conversation")
-        .get()
-    console.log("result get many", tranformDocs(result.docs))
+    // let result = await firebase
+    //     .firestore()
+    //     .collection('conversations')
+    //     // where('users')
+    //     .where('title', '==', "First conversation")
+    //     .get()
+    // console.log("result get many", tranformDocs(result.docs))
 
-    // getOne
-    let id = 'vP0jmMzLVvqNAcxxzAJQ'
-    let result2 = await firebase
-        .firestore()
-        .collection('conversations')
-        .doc(id)
-        .get()
-    console.log("result get one", tranformDoc(result2)) 
+    // // getOne
+    // let id = 'vP0jmMzLVvqNAcxxzAJQ'
+    // let result2 = await firebase
+    //     .firestore()
+    //     .collection('conversations')
+    //     .doc(id)
+    //     .get()
+    // console.log("result get one", tranformDoc(result2)) 
 
     // 2. create .add()
     // let data = {
@@ -107,7 +163,7 @@ async function demoQueryDatabase(){
     // console.log("result add", result3.id)
 
     // 3. update .update()
-    let id2 = 'Nh46NrpyUWzzNIRheBSl'
+    let id2 = 'qnSBHmf3ZnIsNieHQ7OC'
     await firebase
         .firestore()
         .collection('conversations')
@@ -115,19 +171,19 @@ async function demoQueryDatabase(){
         .update({
             // title: 'Update title',
             // test: 123456789
-            users: firebase.firestore.FieldValue.arrayUnion('user3')
+            message: firebase.firestore.FieldValue.arrayUnion('user3')
         })
     console.log("result update")
 
     // 4. delete .remove()
-    let id3 = '5myOYtVs81otlJrvGtCu'
+//     let id3 = '5myOYtVs81otlJrvGtCu'
     
-    await firebase
-        .firestore()
-        .collection('conversations')
-        .doc(id3)
-        .delete()
-    console.log("result delete")
+//     await firebase
+//         .firestore()
+//         .collection('conversations')
+//         .doc(id3)
+//         .delete()
+//     console.log("result delete")
 }
 
 function tranformDocs(docs){
