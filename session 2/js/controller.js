@@ -66,6 +66,7 @@ controller.loadConversations = async function(){
 
         // 3. display data
     view.showCurrentConversation()
+    // view.showListConversations()
 
     // TODO: remove the line below
     // demoQueryDatabase()
@@ -95,6 +96,8 @@ controller.setupDatabaseChange = function(){
                         model.saveCurrentConversation(conversation)
                         view.showCurrentConversation()
                     }
+                    // docChange.type == 'added
+                    // docChange.type == 'removed'
                 }
             }
         })
@@ -116,15 +119,6 @@ controller.addMessage = async function(message){
         view.enable('add-message-btn')
         document.getElementById('message-input').value = ''
     }
-    
-    // await firebase
-    //     .firestore()
-    //     .collection('conversations')
-    //     .doc(id)
-    //     .onSnapshot(function(doc) {
-    //         var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-    //         console.log(source, " data: ", doc.data());
-    //     })
 }
 
 async function demoQueryDatabase(){

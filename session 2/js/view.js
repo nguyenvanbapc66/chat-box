@@ -141,7 +141,7 @@ view.showCurrentConversation = function(){
 
         for(let message of messages){
 
-            let contentMessage = message.content
+            let contentMessage = message.content // nếu contentMessage mình nhập vào rỗng thì ko addMessage 
             let ownerUser = message.owner
             let currentUserEmail = firebase.auth().currentUser.email
             let className = ""

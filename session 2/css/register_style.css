@@ -121,14 +121,51 @@ button:disabled {
 }
 
 
-
 .chat-container{
     width: 100%;
     height: calc(100vh - 38px);
+    display: flex;
+}
+
+.aside-left{
+    width: 15%;
+}
+
+.conversation{
+    padding: 10px;
+}
+
+.conversation:hover{
+    cursor: pointer;
+}
+
+.conversation.current{
+    background: #f2f2f2;
+}
+
+.conversation-title{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.conversation-members{
+    font-size: 10px;
+    font-style: italic;
+    text-align: right;
+}
+
+.form-add-conversation{
+    padding: 10px;
+}
+
+.form-add-conversation>*{
+    margin-bottom: 10px;
 }
 
 .current-conversation{
     height: 100%;
+    width: 100%;
 }
 
 .list-messages{
@@ -180,3 +217,4 @@ button:disabled {
 .user-profile>*{
     margin-right: 10px;
 }
+
