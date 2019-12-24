@@ -135,6 +135,12 @@ button:disabled {
     padding: 10px;
 }
 
+.list-conversations{
+    max-height: 65%;
+    min-height: 15%;
+    overflow-y: scroll;
+}
+
 .conversation:hover{
     cursor: pointer;
 }

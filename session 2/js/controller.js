@@ -42,7 +42,7 @@ controller.login = async function(loginInfo) {
         }
     } catch(err){
         view.setText('login-error', err.message)
-        view.enable('login-error')
+        view.enable('login-submit-btn')
     }
 }
 
@@ -64,9 +64,9 @@ controller.loadConversations = async function(){
         model.saveCurrentConversation(currentConversation)
     }
 
-        // 3. display data
+    // 3. display data
     view.showCurrentConversation()
-    // view.showListConversations()
+    view.showListConversations()
 
     // TODO: remove the line below
     // demoQueryDatabase()
@@ -96,8 +96,11 @@ controller.setupDatabaseChange = function(){
                         model.saveCurrentConversation(conversation)
                         view.showCurrentConversation()
                     }
-                    // docChange.type == 'added
-                    // docChange.type == 'removed'
+                }
+                if(docChange.type == 'added'){
+                    let conversation = tranformDoc(docChange.doc)
+                    model.updateConversation(conversation)
+                    view.showListConversations()
                 }
             }
         })
@@ -119,6 +122,42 @@ controller.addMessage = async function(message){
         view.enable('add-message-btn')
         document.getElementById('message-input').value = ''
     }
+}
+
+controller.addConversation = async function(conversationTitle, friendEmail){
+    view.disable('form-add-conversation-btn')
+    try{
+        let signInMethods = await firebase
+            .auth()
+            .fetchSignInMethodsForEmail(friendEmail)
+        if(!signInMethods.length){
+            throw new Error('Friend email not yet registered!')
+        }
+        if(friendEmail == firebase.auth().currentUser.email){
+            throw new Error('Do not enter your email')
+        }
+        let conversation = {
+            createAt: new Date().toISOString(),
+            messages: [],
+            tittle: conversationTitle,
+            user: [
+                firebase.auth().currentUser.email,
+                friendEmail
+            ]
+        }
+    
+        await firebase
+            .firestore()
+            .collection('conversations')
+            .add(conversation)
+    } catch(err){
+        view.setText('title-error', err.message)
+    }
+    
+    document.getElementById('friend-email-input').value = ''
+    document.getElementById('title-email').value = ''
+    
+    view.enable('form-add-conversation-btn')
 }
 
 async function demoQueryDatabase(){
@@ -145,9 +184,9 @@ async function demoQueryDatabase(){
 
     // 2. create .add()
     // let data = {
-    //     users: ["email1", "email2"],
-    //     message: [],
-    //     title: "Demo conversation",
+    //     user: ["email1", "email2"],
+    //     messages: [],
+    //     tittle: "Demo conversation",
     //     createAt: new Date().toISOString()
     // }
     // let result3 = await firebase
@@ -157,17 +196,17 @@ async function demoQueryDatabase(){
     // console.log("result add", result3.id)
 
     // 3. update .update()
-    let id2 = 'qnSBHmf3ZnIsNieHQ7OC'
-    await firebase
-        .firestore()
-        .collection('conversations')
-        .doc(id2)
-        .update({
-            // title: 'Update title',
-            // test: 123456789
-            message: firebase.firestore.FieldValue.arrayUnion('user3')
-        })
-    console.log("result update")
+    // let id2 = 'qnSBHmf3ZnIsNieHQ7OC'
+    // await firebase
+    //     .firestore()
+    //     .collection('conversations')
+    //     .doc(id2)
+    //     .update({
+    //         // title: 'Update title',
+    //         // test: 123456789
+    //         message: firebase.firestore.FieldValue.arrayUnion('user3')
+    //     })
+    // console.log("result update")
 
     // 4. delete .remove()
 //     let id3 = '5myOYtVs81otlJrvGtCu'

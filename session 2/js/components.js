@@ -69,38 +69,24 @@ components.login = `
 components.chat = `
     <section class="chat-container">
         <div class="aside-left">
-            <div class="list-conversations">
-                <div class="conversation current">
-                    <div class="conversation-title">
-                        <span>First conversation</span>
-                    </div>
-                    <div class="conversation-members">
-                        <span>2 memebers</span>
-                    </div>
-                </div>
-                <div class="conversation">
-                    <div class="conversation-title">
-                        <span>Sencond conversation</span>
-                    </div>
-                    <div class="conversation-members">
-                        <span>2 memebers</span>
-                    </div>
-                </div>
+            <div id="list-conversations" class="list-conversations">
             </div>
-            <form class="form-add-conversation">
+            <form id="form-add-conversation" class="form-add-conversation">
                 <div class="input-wrapper">
                     <input 
                     type="email" 
                     name="friendEmail" 
                     id="friend-email-input" 
                     placeholder="Enter your friend email">
+                    <div id="friend-email-error" class="message-error"></div>
                 </div>
                 <div class="input-wrapper">
                     <input 
                     type="text" 
                     name="title" 
                     id="title-email" 
-                    placeholder="Conversation title">
+                    placeholder="Conversation tittle">
+                    <div id="title-error" class="message-error"></div>
                 </div>
                 <button 
                     type="submit" 

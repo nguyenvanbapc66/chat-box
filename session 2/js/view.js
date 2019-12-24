@@ -96,7 +96,7 @@ view.showComponents = function(name) {
             let app = document.getElementById('app');
             app.innerHTML = components.nav + components.chat;
 
-            controller.loadConversations();
+            controller.loadConversations()
             controller.setupDatabaseChange() // new message coming > update message to screen
 
             let btnSignOut = document.getElementById('sign-out-btn');
@@ -109,6 +109,7 @@ view.showComponents = function(name) {
 
             view.setText('user-email', firebase.auth().currentUser.email);
 
+            // event submit >> send message
             let formAddMessage = document.getElementById('form-add-message')
             formAddMessage.onsubmit = formAddMessageSubmitHandler
 
@@ -122,12 +123,32 @@ view.showComponents = function(name) {
 
                 let message = {
                     content: content,
-                    owner: firebase.auth().currentUser.email,
-                    createAt: new Date().toISOString()
+                    createAt: new Date().toISOString(),
+                    owner: firebase.auth().currentUser.email
                 }
                 
-                
                 controller.addMessage(message)
+            }
+
+            // event submit >> add conversation
+            let formAddConversation = document.getElementById('form-add-conversation')
+            formAddConversation.onsubmit = formAddConversationSubmitHandler
+
+            function formAddConversationSubmitHandler(event){
+                event.preventDefault()
+
+                let friendEmail = formAddConversation.friendEmail.value.trim()
+                let conversationTitle = formAddConversation.title.value.trim()
+
+                let validateResult = [
+                    view.validate(conversationTitle, 'title-error', 'Tittle required!'),
+                    view.validate(friendEmail, 'friend-email-error', 'Friend email required!'),
+                    // view.validate(friendEmail, 'friend-email-error', 'Friend email already have!')
+                ]
+
+                if(allPassed(validateResult)){
+                    controller.addConversation(conversationTitle, friendEmail)
+                }
             }
         }
     }
@@ -140,28 +161,83 @@ view.showCurrentConversation = function(){
         listMessages.innerHTML = ""
 
         for(let message of messages){
-
             let contentMessage = message.content // nếu contentMessage mình nhập vào rỗng thì ko addMessage 
             let ownerUser = message.owner
             let currentUserEmail = firebase.auth().currentUser.email
             let className = ""
 
-            if(ownerUser == currentUserEmail){
-                className = "message your"
-            } else{
-                className = "message"
+            if(contentMessage){
+                if(ownerUser == currentUserEmail){
+                    className = "message your"
+                } else{
+                    className = "message"
+                }
+    
+                let html = `
+                    <div class="${className}">
+                        <span>${contentMessage}</span>
+                    </div>
+                `
+                
+                listMessages.innerHTML += html;
             }
-
-            let html = `
-                <div class="${className}">
-                    <span>${contentMessage}</span>
-                </div>
-            `
-            
-            listMessages.innerHTML += html;
         }
 
         listMessages.scrollTop = listMessages.scrollHeight
+    }
+}
+
+// show all of list conversations
+view.showListConversations = function(){
+    if(model.conversations){
+        let conversations = model.conversations
+        let listConversations = document.getElementById('list-conversations')
+        listConversations.innerHTML = ""
+
+        // show list
+        for(let conversation of conversations){
+            let tittle = conversation.tittle
+            let  id = conversation.id
+            let members = conversation.user.length > 1
+                ? `${conversation.user.length} members`
+                : "1 member"
+            let className = (model.currentConversation && model.currentConversation.id == id)
+                ? "conversation current"
+                : "conversation"
+
+            let html = `
+                <div id="${conversation.id}" class="${className}">
+                    <div class="conversation-title">
+                        <span>${tittle}</span>
+                    </div>
+                    <div class="conversation-members">
+                        <span>${members}</span>
+                    </div>
+                </div>
+            `
+            
+            listConversations.innerHTML += html;
+        }
+
+        // add event click conversation
+        let clickConversation = document.getElementsByClassName('conversation')
+        
+        for(let i = 0; i < clickConversation.length; i++){
+            clickConversation[i].addEventListener('click', clickConversationHandler)
+
+            function clickConversationHandler(){
+                let conversations = model.conversations
+                for(let conversation of conversations){
+                    if(conversation.id == clickConversation[i].id){
+                        clickConversation[i].className = "conversation current"
+
+                        model.saveCurrentConversation(conversation)
+                        view.showCurrentConversation()
+                        view.showListConversations()
+                    }
+                }
+            }
+        }
     }
 }
 
