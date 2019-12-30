@@ -1,6 +1,3 @@
-// save html of all screens
-const components = {}
-
 components.register = `
     <section class="register-container">
         <form id="form-register" class="form-register">
@@ -64,59 +61,4 @@ components.login = `
             </div>
         </form>
     </section>
-`
-
-components.chat = `
-    <section class="chat-container">
-        <div class="aside-left">
-            <div id="list-conversations" class="list-conversations">
-            </div>
-            <form id="form-add-conversation" class="form-add-conversation">
-                <div class="input-wrapper">
-                    <input 
-                    type="email" 
-                    name="friendEmail" 
-                    id="friend-email-input" 
-                    placeholder="Enter your friend email">
-                    <div id="friend-email-error" class="message-error"></div>
-                </div>
-                <div class="input-wrapper">
-                    <input 
-                    type="text" 
-                    name="title" 
-                    id="title-email" 
-                    placeholder="Conversation tittle">
-                    <div id="title-error" class="message-error"></div>
-                </div>
-                <button 
-                    type="submit" 
-                    id="form-add-conversation-btn"
-                    class="btn-icon">
-                    <i class="fas fa-plus"></i>
-                </button>
-            </form>
-        </div>
-        <div class="current-conversation">
-            <div id="list-messages" class="list-messages">
-            </div>
-            <form id="form-add-message" class="form-add-message">
-                <div class="input-wrapper">
-                    <input id="message-input" type="text" name="message" placeholder="Enter your message here">
-                </div>
-                <button id="add-message-btn" type="submit">Send</button>
-            </form>
-        </div>
-        <!-- right -->
-    </section>
-`
-
-components.nav = `
-    <nav class="main-nav">
-        <div class="user-profile">
-            <span id="user-email" class="user-email"></span>
-            <button id="sign-out-btn" class="btn-icon">
-                <i class="fas fa-sign-out-alt"></i>
-            </button>
-        </div>
-    </nav>
 `

@@ -154,93 +154,6 @@ view.showComponents = function(name) {
     }
 }
 
-view.showCurrentConversation = function(){
-    if(model.currentConversation){
-        let messages = model.currentConversation.messages
-        let listMessages = document.getElementById('list-messages')
-        listMessages.innerHTML = ""
-
-        for(let message of messages){
-            let contentMessage = message.content // nếu contentMessage mình nhập vào rỗng thì ko addMessage 
-            let ownerUser = message.owner
-            let currentUserEmail = firebase.auth().currentUser.email
-            let className = ""
-
-            if(contentMessage){
-                if(ownerUser == currentUserEmail){
-                    className = "message your"
-                } else{
-                    className = "message"
-                }
-    
-                let html = `
-                    <div class="${className}">
-                        <span>${contentMessage}</span>
-                    </div>
-                `
-                
-                listMessages.innerHTML += html;
-            }
-        }
-
-        listMessages.scrollTop = listMessages.scrollHeight
-    }
-}
-
-// show all of list conversations
-view.showListConversations = function(){
-    if(model.conversations){
-        let conversations = model.conversations
-        let listConversations = document.getElementById('list-conversations')
-        listConversations.innerHTML = ""
-
-        // show list
-        for(let conversation of conversations){
-            let tittle = conversation.tittle
-            let  id = conversation.id
-            let members = conversation.user.length > 1
-                ? `${conversation.user.length} members`
-                : "1 member"
-            let className = (model.currentConversation && model.currentConversation.id == id)
-                ? "conversation current"
-                : "conversation"
-
-            let html = `
-                <div id="${conversation.id}" class="${className}">
-                    <div class="conversation-title">
-                        <span>${tittle}</span>
-                    </div>
-                    <div class="conversation-members">
-                        <span>${members}</span>
-                    </div>
-                </div>
-            `
-            
-            listConversations.innerHTML += html;
-        }
-
-        // add event click conversation
-        let clickConversation = document.getElementsByClassName('conversation')
-        
-        for(let i = 0; i < clickConversation.length; i++){
-            clickConversation[i].addEventListener('click', clickConversationHandler)
-
-            function clickConversationHandler(){
-                let conversations = model.conversations
-                for(let conversation of conversations){
-                    if(conversation.id == clickConversation[i].id){
-                        clickConversation[i].className = "conversation current"
-
-                        model.saveCurrentConversation(conversation)
-                        view.showCurrentConversation()
-                        view.showListConversations()
-                    }
-                }
-            }
-        }
-    }
-}
-
 view.setText = function(id, text) {
     document.getElementById(id).innerText = text;
 }
@@ -271,10 +184,3 @@ function allPassed(validateResult) {
     }
     return true
 }
-
-// function validatePassword(password){
-//     for(let i = 0; i < password.length; i++){
-//         let charAt = password.charAt(i)
-//         //validate each character
-//     }
-// }

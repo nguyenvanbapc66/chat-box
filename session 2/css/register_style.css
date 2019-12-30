@@ -131,6 +131,10 @@ button:disabled {
     width: 15%;
 }
 
+.aside-right{
+    width: 15%;
+}
+
 .conversation{
     padding: 10px;
 }
@@ -172,6 +176,24 @@ button:disabled {
 .current-conversation{
     height: 100%;
     width: 100%;
+}
+
+.detail-current-conversation{
+    padding: 10px;
+}
+
+.leave-current{
+    padding: 10px;
+}
+
+.user-email{
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.create-at{
+    font-size: 10px;
+    text-align: right;
 }
 
 .list-messages{

@@ -24,3 +24,22 @@ model.updateConversation = function(conversation){
         model.conversations.unshift(conversation)
     }
 }
+
+model.removeConversation = function(conversation){
+    if(model.conversations){
+        let index = model.conversations.findIndex(function(element){
+            return element.id == conversation.id
+        })
+        if(index >= 0){
+            model.conversations.splice(index, 1)
+        }
+    }
+}
+
+model.isCurrentConversation = function(conversation){
+    return model.currentConversation && model.currentConversation.id == conversation.id
+}
+
+model.hasMoreConversation = function(){
+    return model.conversations.length
+}
