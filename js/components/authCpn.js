@@ -2,7 +2,7 @@ components.register = `
     <section class="register-container">
         <form id="form-register" class="form-register">
             <div class="form-header">
-                <h3>Messenger</h3>
+                <h3>Social Chat</h3>
             </div>
             <div class="form-content">
                 <div class="name-wrapper">
@@ -42,7 +42,7 @@ components.login = `
     <section class="login-container">
         <form id="form-login" class="form-login">
             <div class="form-header">
-                <h3>Messenger</h3>
+                <h3>Social Chat</h3>
             </div>
             <div class="form-content">
                 <div class="input-wrapper">
