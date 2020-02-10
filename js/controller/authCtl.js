@@ -4,7 +4,7 @@ controller.register = async function(registerInfo) {
     // 3. send user an email varification
     let email = registerInfo.email
     let password = registerInfo.password
-    let displayName = registerInfo.firstname + registerInfo.lastname
+    let displayName = registerInfo.firstname + ' ' + registerInfo.lastname
     view.setText('register-error', '')
     view.setText('register-sucess', '')
     view.disable('register-submit-btn')
@@ -22,7 +22,6 @@ controller.register = async function(registerInfo) {
 }
 
 controller.login = async function(loginInfo) {
-    // firebase.auth().signInWithEmailAndPassword()
     let email = loginInfo.email;
     let password = loginInfo.password;
     view.setText('login-error', '');

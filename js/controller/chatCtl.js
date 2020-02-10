@@ -1,6 +1,7 @@
 controller.loadConversations = async function(){
     // 1. load data form db
     let currentEmail = firebase.auth().currentUser.email
+    
     let result = await firebase
         .firestore()
         .collection('conversations')
